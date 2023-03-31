@@ -234,7 +234,7 @@ xAnterior = x - paso;
 while( Math.Abs(yMedia) > criterioCero)
 {
     xMedia = (xAnterior + x)/2; //PUNTO INTERMEDIO DE LAS X'S
-    yMedia =  (10.5859 * Math.Log(xMedia) + 48.368 - 60);  //EDITAR
+    yMedia =  (10.5859 * Math.Log(xMedia) + 48.368 - 60);   //EDITAR
 
     //VALIDAR SI TIENE EL MISMO SIGNO QUE Y1 
     if(y1 * yMedia > 0)//TIENEN EL MISMO SIGNO
@@ -255,16 +255,45 @@ Console.WriteLine("Raiz encontrada: [" + xMedia + "]");
 
 
 //__-------------------------------------------------__----------------//
+//30.4702 * Math.Cos(x/8) + 22.4977 * Math.Exp((x/10)) - 60; 
 
+//RAIZ DE MARIA _______________
+x = 0; xAnterior = 0; xMedia = 0; paso = 1;  y1 = 1; y22 =1; yMedia = 1;  //SOBREESCRIBIR VARIABLES
+y22= y1 =  30.4702 * Math.Cos(x/8) + 22.4977 * Math.Exp((x/10)) - 60; //evaluando la función en -4 EDITAR
 
-//RAIZ DE MARIA
- y22 = 0; x = -10;
- double dy; 
-while (Math.Abs(y22) > criterioCero)
+while(y1*y22 >= 0)
 {
-    y22 = 30.4702 * Math.Cos(x/8) + 22.4977 * Math.Exp(x/10) - 60;
-
-    dy = -3.80875 * Math.Sin(x/8) + 2.24977 * Math.Exp(x/10) / 10; 
-    x = x - y22 / dy;          
+  y1 = y22;
+  x += paso;
+  y22 =  30.4702 * Math.Cos(x/8) + 22.4977 * Math.Exp((x/10)) - 60;  // EDITABLE, 
+                                                        // Es igual a: y = x^3 - x^2 + 4x - 2 
 }
-Console.WriteLine("RAIZ ENCONTRADA 2: " + x);
+
+xAnterior = x - paso;
+
+//BISECCION (OBTENER PUNTOS INTERMEDIOS E IR CAMBIANDO LIMITES
+while( Math.Abs(yMedia) > criterioCero)
+{
+
+    xMedia = x - ((xAnterior - x)*y22)/(y1-y22); 
+
+    yMedia = 30.4702 * Math.Cos(xMedia/8) + 22.4977 * Math.Exp((xMedia/10)) - 60;  //EDITAR
+
+    //VALIDAR SI TIENE EL MISMO SIGNO QUE Y1 
+    if(y1 * yMedia > 0)//TIENEN EL MISMO SIGNO
+    {
+        y1 = yMedia;
+        xAnterior = xMedia;
+    }
+    
+
+    //VALIDAR SI TIENE EL MISMO SIGNO QUE Y2
+    else if(y22 * yMedia > 0)//TIENEN EL MISMO SIGNO
+    {
+        y22 = yMedia; //adaptar las y's
+        x = xMedia; //adaptar las x's
+    } 
+}
+
+Console.Write("Raiz encontrada en Metodo Secante: [" + xMedia + "]");
+
